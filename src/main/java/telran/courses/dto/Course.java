@@ -1,8 +1,11 @@
 package telran.courses.dto;
 
+import java.io.Serializable;
+
 import javax.validation.constraints.*;
 
-public class Course {
+public class Course implements Serializable { 
+	private static final long serialVersionUID = 1L;
 	private static final long MIN_HOURS = 80;
 	private static final long MAX_HOURS = 500;
 	private static final long MIN_COST = 5000;
