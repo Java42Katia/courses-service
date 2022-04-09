@@ -106,6 +106,7 @@ public class CoursesServiceImpl implements CoursesService {
 
 	@Override
 	public void save() {
+		LOG.debug("save procedure");
 		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName))) {
 			oos.writeObject(this);
 			LOG.debug("data has been saved");
@@ -115,6 +116,10 @@ public class CoursesServiceImpl implements CoursesService {
 
 	}
 
+	/* V.R.
+	 *  Due to your design the method restoreInvocation is redundant.
+	 *  The annotation @PostConstruct has to come before the method restore()
+	 */
 	@PostConstruct
 	void restoreInvocation() {
 		restore();
@@ -123,6 +128,12 @@ public class CoursesServiceImpl implements CoursesService {
 	@PreDestroy
 	void saveInvocation() {
 		LOG.debug("Destroing..");
+		/* V.R.  Generally speaking the following call
+		 *  is redundant. All of procedures are called from 
+		 *  the bean CoursesSavingService.
+		 *  So the whole method saveInvocation is redundant.
+		 *  Due to your desin it does nothing
+		 */
 		save();
 	}
 
