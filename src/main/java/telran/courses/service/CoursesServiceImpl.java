@@ -118,36 +118,27 @@ public class CoursesServiceImpl implements CoursesService {
 	void restoreInvocation() throws InterruptedException {
 		LOG.debug("interval: {}", interval);
 		restore();
-		savingThread = new CoursesSavingThread(this);
+		savingThread = new CoursesSavingThread();
 		savingThread.start();
 	}
 	
 	@PreDestroy
 	void saveInvocation() {
-		LOG.debug("Stop saving...");
-		savingThread.stopSaving();
+		LOG.debug("Destroy...");
 	}
 	//CoursesServiceImpl
 	private class CoursesSavingThread extends Thread {
-		int intervalU;
-		CoursesService service;
-		boolean stopThread = false;
-		
-		public CoursesSavingThread(CoursesService service) {
-			this.intervalU = interval*1000*60;
-			this.service = service;
-		}
-		
-		public void stopSaving() {
-			stopThread = true;
+
+		public CoursesSavingThread() {
+			setDaemon(true);
 		}
 		
 		@Override
 		public void run() {
-			while(!stopThread) {
+			while(true) {
 				try {
-					sleep(intervalU);
-					service.save();
+					sleep(interval*1000*60);
+					save();
 					LOG.debug("Saving is done");
 				} catch (InterruptedException e) {
 					e.printStackTrace();
