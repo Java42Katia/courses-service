@@ -5,6 +5,7 @@ import java.util.Base64;
 import javax.validation.Valid;
 
 import org.slf4j.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,13 +21,24 @@ public class AuthController {
 	AccountingManagement accounting;
 	PasswordEncoder passwordEncoder;
 	
+	@Value(value = "${app.security.enable}")
+	private boolean securityEnable;
+	
 	public AuthController(AccountingManagement accounting, PasswordEncoder passwordEncoder) {
 		this.accounting = accounting;
 		this.passwordEncoder = passwordEncoder;
 	}
 
+
 	@PostMapping
 	LoginResponse login( @RequestBody @Valid LoginData loginData) {
+		
+		if (!securityEnable) {
+
+			LOG.debug("not secure login");
+			return new LoginResponse("Basic " + Base64.getEncoder().encodeToString("admin@tel-ran.co.il:admin1234".getBytes()), "ADMIN");
+		}
+	
 		LOG.debug("login data are email {}, password: {}", loginData.email, loginData.password);
 		Account account = accounting.getAccount(loginData.email);
 		
