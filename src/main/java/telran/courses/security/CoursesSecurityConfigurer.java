@@ -1,5 +1,6 @@
 package telran.courses.security;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,6 +12,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableWebSecurity
 public class CoursesSecurityConfigurer extends WebSecurityConfigurerAdapter {
+	
+
+	
+	@Value(value = "${app.security.enable}")
+	private boolean securityEnable;
+	
 	@Bean
 	PasswordEncoder getPasswordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -20,8 +27,12 @@ public class CoursesSecurityConfigurer extends WebSecurityConfigurerAdapter {
 		http.httpBasic();
 		http.cors().and().csrf().disable();
 		http.authorizeHttpRequests().antMatchers("/login").permitAll();
-		http.authorizeHttpRequests().antMatchers(HttpMethod.GET).hasAnyRole("USER", "ADMIN");
-		http.authorizeHttpRequests().anyRequest().hasRole("ADMIN");
+		if (securityEnable) {
+			http.authorizeHttpRequests().antMatchers(HttpMethod.GET).hasAnyRole("USER", "ADMIN");
+			http.authorizeHttpRequests().anyRequest().hasRole("ADMIN");
+		} else {
+			http.authorizeHttpRequests().anyRequest().permitAll();
+		}
 	}
 
 }

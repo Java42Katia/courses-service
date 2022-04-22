@@ -21,7 +21,7 @@ public class AuthController {
 	AccountingManagement accounting;
 	PasswordEncoder passwordEncoder;
 	
-	@Value(value = "${app.security.enable}")
+	@Value("${app.security.enable: true}")
 	private boolean securityEnable;
 	
 	public AuthController(AccountingManagement accounting, PasswordEncoder passwordEncoder) {
@@ -33,10 +33,9 @@ public class AuthController {
 	@PostMapping
 	LoginResponse login( @RequestBody @Valid LoginData loginData) {
 		
-		if (!securityEnable) {
-
-			LOG.debug("not secure login");
-			return new LoginResponse("Basic " + Base64.getEncoder().encodeToString("admin@tel-ran.co.il:admin1234".getBytes()), "ADMIN");
+		if(!securityEnable) {
+			LOG.debug("Security disable");
+			return new LoginResponse("", "ADMIN");
 		}
 	
 		LOG.debug("login data are email {}, password: {}", loginData.email, loginData.password);
