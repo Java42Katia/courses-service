@@ -14,20 +14,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class CoursesSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	
 
-	
-	@Value(value = "${app.security.enable}")
-	private boolean securityEnable;
+	@Value(value = "${app.security.enable: true}")
+	public static boolean isSecurityEnable;
 	
 	@Bean
 	PasswordEncoder getPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.httpBasic();
 		http.cors().and().csrf().disable();
 		http.authorizeHttpRequests().antMatchers("/login").permitAll();
-		if (securityEnable) {
+		if (isSecurityEnable) {
 			http.authorizeHttpRequests().antMatchers(HttpMethod.GET).hasAnyRole("USER", "ADMIN");
 			http.authorizeHttpRequests().anyRequest().hasRole("ADMIN");
 		} else {
