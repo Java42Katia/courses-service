@@ -32,7 +32,7 @@ public class AuthController {
 	@PostMapping
 	LoginResponse login( @RequestBody @Valid LoginData loginData) {
 		
-		if(!CoursesSecurityConfigurer.isSecurityEnable) {
+		if(!isSecurityEnable) {
 			LOG.debug("Security disable");
 			return new LoginResponse("", "ADMIN");
 		}
