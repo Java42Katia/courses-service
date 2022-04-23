@@ -7,7 +7,6 @@ import javax.validation.Valid;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import telran.courses.dto.*;
 import telran.courses.exceptions.BadRequestException;
