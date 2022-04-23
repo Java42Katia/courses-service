@@ -15,7 +15,7 @@ public class CoursesSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	
 
 	@Value(value = "${app.security.enable: true}")
-	public static boolean isSecurityEnable;
+	public boolean isSecurityEnable;
 	
 	@Bean
 	PasswordEncoder getPasswordEncoder() {

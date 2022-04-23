@@ -21,7 +21,7 @@ public class AuthController {
 	PasswordEncoder passwordEncoder;
 	
 	@Value(value = "${app.security.enable: true}")
-	public static boolean isSecurityEnable;
+	public boolean isSecurityEnable;
 	
 	public AuthController(AccountingManagement accounting, PasswordEncoder passwordEncoder) {
 		this.accounting = accounting;
