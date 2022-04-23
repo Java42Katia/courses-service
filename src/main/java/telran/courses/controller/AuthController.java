@@ -5,6 +5,7 @@ import java.util.Base64;
 import javax.validation.Valid;
 
 import org.slf4j.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -20,15 +21,18 @@ public class AuthController {
 	AccountingManagement accounting;
 	PasswordEncoder passwordEncoder;
 	
+	@Value(value = "${app.security.enable: true}")
+	public static boolean isSecurityEnable;
+	
 	public AuthController(AccountingManagement accounting, PasswordEncoder passwordEncoder) {
 		this.accounting = accounting;
 		this.passwordEncoder = passwordEncoder;
 	}
 
 	@PostMapping
-	LoginResponse login( @RequestBody @Valid LoginData loginData, BindingResult errors) {
+	LoginResponse login( @RequestBody @Valid LoginData loginData) {
 		
-		if(errors.hasFieldErrors() && !CoursesSecurityConfigurer.isSecurityEnable) {
+		if(!CoursesSecurityConfigurer.isSecurityEnable) {
 			LOG.debug("Security disable");
 			return new LoginResponse("", "ADMIN");
 		}
