@@ -13,7 +13,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class CoursesSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	
-
+	/* V.R. If to use resource file in all places,
+	 * where it is needed (AuthController.java), then the variable isSecurityEnable
+	 * will not be static
+	 */
 	@Value(value = "${app.security.enable: true}")
 	public static boolean isSecurityEnable;
 	
